@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>晨昏 Weightly · 原型展示</title>
+<style>
+  :root {
+    --bg-top: #FCE7CE; --bg-bot: #E7D9EE;
+    --bg: #FBF5EF; --surface: #FFFFFF; --surface-2: #F6EDE5;
+    --ink: #2A2340; --ink-soft: #6E6685; --ink-faint: #A79FB6;
+    --dawn: #F3A26D; --dusk-2: #7D6FB0; --accent: #E8735A; --accent-ink: #fff;
+    --line: rgba(42,35,64,0.10);
+    --grad: linear-gradient(135deg, #F8C98E 0%, #F3A26D 48%, #C98BA6 100%);
+    --shadow: 0 24px 60px -30px rgba(58,42,78,0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-top: #241d38; --bg-bot: #100d1c;
+      --bg: #16121F; --surface: #1E1A2B; --surface-2: #262135;
+      --ink: #F0EBF6; --ink-soft: #A79FB8; --ink-faint: #6E6683;
+      --dawn: #F3A26D; --dusk-2: #A493D6; --accent: #F0876E; --accent-ink: #1a1220;
+      --line: rgba(240,235,246,0.11);
+      --grad: linear-gradient(135deg, #E9B478 0%, #D98C5E 45%, #7D6FB0 100%);
+      --shadow: 0 24px 60px -28px rgba(0,0,0,0.66);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg-top: #FCE7CE; --bg-bot: #E7D9EE; --bg: #FBF5EF; --surface: #FFFFFF; --surface-2: #F6EDE5;
+    --ink: #2A2340; --ink-soft: #6E6685; --ink-faint: #A79FB6; --dawn: #F3A26D; --dusk-2: #7D6FB0;
+    --accent: #E8735A; --accent-ink: #fff; --line: rgba(42,35,64,0.10);
+    --grad: linear-gradient(135deg, #F8C98E 0%, #F3A26D 48%, #C98BA6 100%);
+    --shadow: 0 24px 60px -30px rgba(58,42,78,0.5);
+  }
+  :root[data-theme="dark"] {
+    --bg-top: #241d38; --bg-bot: #100d1c; --bg: #16121F; --surface: #1E1A2B; --surface-2: #262135;
+    --ink: #F0EBF6; --ink-soft: #A79FB8; --ink-faint: #6E6683; --dawn: #F3A26D; --dusk-2: #A493D6;
+    --accent: #F0876E; --accent-ink: #1a1220; --line: rgba(240,235,246,0.11);
+    --grad: linear-gradient(135deg, #E9B478 0%, #D98C5E 45%, #7D6FB0 100%);
+    --shadow: 0 24px 60px -28px rgba(0,0,0,0.66);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(120% 70% at 15% 0%, var(--bg-top) 0%, transparent 58%),
+      linear-gradient(178deg, var(--bg-top) 0%, var(--bg-bot) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vw, 88px) 22px 96px; }
+
+  .theme-toggle {
+    position: fixed; top: 18px; right: 18px;
+    background: color-mix(in srgb, var(--surface) 60%, transparent); backdrop-filter: blur(8px);
+    border: 1px solid var(--line); color: var(--ink);
+    border-radius: 999px; padding: 8px 15px; font: 600 12.5px inherit; cursor: pointer; letter-spacing: 0.3px;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  header { margin-bottom: 46px; }
+  .brand { display: flex; align-items: center; gap: 13px; margin-bottom: 26px; }
+  .mark { width: 50px; height: 50px; border-radius: 15px; background: var(--grad); display: grid; place-items: center; box-shadow: 0 10px 22px -8px rgba(211,138,94,0.7); flex-shrink: 0; }
+  .brand .n { font-size: 21px; font-weight: 700; letter-spacing: 0.5px; }
+  .brand .s { font-size: 11.5px; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-soft); margin-top: 2px; }
+  h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.16; letter-spacing: -0.5px; margin: 0 0 16px; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--dawn); }
+  h1 em.d { color: var(--dusk-2); }
+  .lede { font-size: 16px; color: var(--ink-soft); max-width: 60ch; margin: 0; }
+
+  .sec-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 18px; }
+
+  .cards { display: grid; gap: 18px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+    padding: 26px 26px 24px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .card.soon { opacity: 0.62; box-shadow: none; border-style: dashed; }
+  .card .ver-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .badge { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff; background: var(--grad); padding: 5px 12px; border-radius: 999px; }
+  .badge.ghost { background: none; color: var(--ink-faint); border: 1px solid var(--line); }
+  .card h2 { font-size: 20px; margin: 0; font-weight: 700; }
+  .card .meta { font-size: 12.5px; color: var(--ink-faint); margin-left: auto; }
+  .card p { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .scope { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; list-style: none; }
+  .scope li { font-size: 12.5px; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+  .scope li.no { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: var(--ink-faint); }
+  .open {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14.5px;
+    padding: 12px 20px; border-radius: 13px; transition: transform 0.15s ease;
+  }
+  .open:hover { transform: translateY(-1px); }
+  .open:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .open .arr { transition: transform 0.15s ease; }
+  .open:hover .arr { transform: translateX(3px); }
+  .soon-tag { font-size: 13px; color: var(--ink-faint); font-weight: 600; }
+
+  footer { margin-top: 52px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-faint); }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeBtn" aria-label="切换明暗">☾ 黄昏</button>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 26 26" fill="none">
+          <circle cx="13" cy="15" r="5.2" fill="#fff"/>
+          <path d="M3 20 H23" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M13 4.5 V7.5 M6 7 L7.8 8.8 M20 7 L18.2 8.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="n">晨昏 · Weightly</div>
+        <div class="s">Prototype Showcase</div>
+      </div>
+    </div>
+
+    <h1>从<em>晨</em>到<em class="d">昏</em>,<br>体重有人陪你一起记。</h1>
+    <p class="lede">App + Web 的 AI 陪伴式减重管理产品。这里汇总各版本可交互原型 —— 先设计、后写码,一版一版看方向对不对。</p>
+  </header>
+
+  <p class="sec-label">原型版本</p>
+  <div class="cards">
+
+    <div class="card">
+      <div class="ver-row">
+        <span class="badge">V1</span>
+        <h2>核心记录体验 + AI 助手</h2>
+        <span class="meta">2026 · 进行中</span>
+      </div>
+      <p>早晚体重记录、日历看每日数值、趋势可视化,以及右下角悬浮的陪伴式 AI 助手「小昏」—— 用语音/文字就能让它替你记体重。App 端手机原型。</p>
+      <ul class="scope">
+        <li>早/晚体重</li>
+        <li>日历数值</li>
+        <li>趋势图表</li>
+        <li>AI 助手（悬浮入口）</li>
+        <li class="no">饮食</li>
+        <li class="no">运动</li>
+        <li class="no">营养知识库</li>
+      </ul>
+      <a class="open" href="../prototype/weightly-v1.html">
+        打开 V1 原型 <span class="arr" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="card soon">
+      <div class="ver-row">
+        <span class="badge ghost">V2</span>
+        <h2>Web 宽屏布局</h2>
+        <span class="meta">规划中</span>
+      </div>
+      <p>为更宽的 Web 屏幕单独设计:侧边栏导航、今天 + 日历并排。一套代码、两端布局。</p>
+      <span class="soon-tag">即将到来</span>
+    </div>
+
+  </div>
+
+  <footer>
+    产品规划与技术决策见仓库 <a href="../PLANNING.md">PLANNING.md</a> · 主仓库
+    <a href="https://github.com/molly-gith/Weightly">molly-gith/Weightly</a>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("themeBtn");
+    function label() {
+      var dark = root.getAttribute("data-theme") === "dark"
+        || (!root.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+      btn.textContent = dark ? "☀ 破晓" : "☾ 黄昏";
+    }
+    btn.addEventListener("click", function () {
+      var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+      label();
+    });
+    label();
+  })();
+</script>
+</body>
+</html>
