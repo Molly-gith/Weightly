@@ -286,15 +286,48 @@
   .chart-wrap { width: 100%; }
   svg.trend { width: 100%; height: 150px; display: block; }
 
-  /* Assistant */
-  .chat-head { padding: 10px 2px 14px; display: flex; align-items: center; gap: 12px; }
-  .chat-head .ava { width: 44px; height: 44px; border-radius: 14px; background: var(--grad-day); display: grid; place-items: center; box-shadow: 0 8px 18px -10px rgba(211,138,94,0.8); flex-shrink: 0; }
-  .chat-head .who h2 { margin: 0; font-size: 17px; font-weight: 700; color: var(--ink); }
-  .chat-head .who p { margin: 2px 0 0; font-size: 12px; color: var(--good); font-weight: 500; display: flex; align-items: center; gap: 6px; }
-  .chat-head .who p::before { content:""; width: 7px; height: 7px; border-radius: 999px; background: var(--good); }
+  /* ---------- Floating AI entry (FAB) ---------- */
+  .fab {
+    position: absolute; right: 18px; bottom: 92px; z-index: 30;
+    width: 60px; height: 60px; border-radius: 20px;
+    background: var(--grad-day); border: none; cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 16px 32px -10px rgba(211, 138, 94, 0.9);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .fab svg { width: 27px; height: 27px; }
+  .fab:active { transform: scale(0.92); }
+  .fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .fab .spark { position: absolute; top: -3px; right: -3px; width: 15px; height: 15px; border-radius: 999px; background: var(--accent); border: 2.5px solid var(--bg); }
+  .fab.hidden { opacity: 0; transform: scale(0.5) translateY(10px); pointer-events: none; }
+
+  /* ---------- AI assistant sheet ---------- */
+  .ai-sheet {
+    position: absolute; inset: 0; z-index: 40;
+    background: var(--bg); border-radius: 33px;
+    display: flex; flex-direction: column;
+    transform: translateY(101%); visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0.4s;
+  }
+  .ai-sheet.open { transform: none; visibility: visible; }
+  .sheet-head {
+    flex-shrink: 0; padding: 50px 18px 14px; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sheet-head .ava { width: 44px; height: 44px; border-radius: 14px; background: var(--grad-day); display: grid; place-items: center; box-shadow: 0 8px 18px -10px rgba(211,138,94,0.8); flex-shrink: 0; }
+  .sheet-head .who { flex: 1; }
+  .sheet-head .who h2 { margin: 0; font-size: 17px; font-weight: 700; color: var(--ink); }
+  .sheet-head .who p { margin: 2px 0 0; font-size: 12px; color: var(--good); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .sheet-head .who p::before { content:""; width: 7px; height: 7px; border-radius: 999px; background: var(--good); }
+  .sheet-close { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
+  .sheet-close:hover { border-color: var(--accent); color: var(--accent); }
+  .sheet-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .sheet-body { flex: 1; overflow-y: auto; padding: 18px 18px 6px; }
+  .sheet-body::-webkit-scrollbar { width: 0; }
 
   .thread { display: flex; flex-direction: column; gap: 13px; padding-bottom: 6px; }
-  .msg { max-width: 80%; font-size: 14px; line-height: 1.55; padding: 11px 14px; border-radius: 18px; }
+  .msg { max-width: 82%; font-size: 14px; line-height: 1.55; padding: 11px 14px; border-radius: 18px; }
   .msg.ai { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 6px; color: var(--ink); }
   .msg.me { align-self: flex-end; background: var(--grad-day); color: #fff; border-bottom-right-radius: 6px; }
   .msg.me.voice { display: flex; align-items: center; gap: 10px; }
@@ -303,31 +336,31 @@
   .tool-chip {
     align-self: flex-start; display: inline-flex; align-items: center; gap: 9px;
     background: var(--surface-2); border: 1px solid rgba(62,158,127,0.35);
-    border-radius: 13px; padding: 9px 13px; font-size: 12.5px; color: var(--ink); max-width: 82%;
+    border-radius: 13px; padding: 9px 13px; font-size: 12.5px; color: var(--ink); max-width: 88%;
   }
   .tool-chip .ok { width: 19px; height: 19px; border-radius: 999px; background: var(--good); color: #fff; display: grid; place-items: center; font-size: 12px; flex-shrink: 0; }
   .tool-chip b { font-weight: 600; }
   .tool-chip .val { color: var(--good); font-weight: 700; font-variant-numeric: tabular-nums; }
-  .disclaim { align-self: center; text-align: center; font-size: 10.5px; color: var(--ink-faint); line-height: 1.5; padding: 6px 20px; max-width: 90%; }
+  .disclaim { align-self: center; text-align: center; font-size: 10.5px; color: var(--ink-faint); line-height: 1.5; padding: 10px 20px 4px; max-width: 90%; }
   .typing { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; border-bottom-left-radius: 6px; padding: 13px 16px; display: flex; gap: 5px; }
   .typing i { width: 7px; height: 7px; border-radius: 999px; background: var(--ink-faint); animation: blink 1.2s infinite; }
   .typing i:nth-child(2) { animation-delay: 0.2s; }
   .typing i:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,60%,100% { opacity: 0.3; } 30% { opacity: 1; } }
 
-  .suggest { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px 0 2px; }
+  .suggest { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 0 2px; }
   .suggest button {
     border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
     border-radius: 999px; padding: 8px 13px; font-size: 12.5px; cursor: pointer; font-family: inherit;
   }
   .suggest button:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Input bar */
+  /* Input bar (inside sheet) */
   .inputbar {
-    position: absolute; left: 12px; right: 12px; bottom: 78px;
+    flex-shrink: 0; margin: 6px 12px 20px;
     display: flex; align-items: center; gap: 9px;
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: 999px; padding: 7px 8px 7px 16px; box-shadow: 0 8px 24px -14px rgba(58,42,78,0.5);
+    border-radius: 999px; padding: 7px 8px 7px 16px;
   }
   .inputbar input { flex: 1; border: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--ink); outline: none; }
   .inputbar input::placeholder { color: var(--ink-faint); }
@@ -379,7 +412,7 @@
     <ul class="scope-list">
       <li><span class="k">今天</span><span>早 / 晚体重记录 · 减重旅程进度</span></li>
       <li><span class="k">日历</span><span>每天的体重数值 · 趋势可视化图表</span></li>
-      <li><span class="k">助手</span><span>语音 / 文字让 AI 帮你记体重 + 陪伴</span></li>
+      <li><span class="k">助手</span><span>右下角悬浮入口 · 语音/文字随时记体重 + 陪伴</span></li>
     </ul>
 
     <div class="stamp">V1 不含 · <b>饮食</b> · <b>运动</b> · <b>营养知识库</b>(后续版本)</div>
@@ -458,7 +491,7 @@
               <div class="mic-mini" aria-hidden="true">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="5.5" y="1.5" width="4" height="8" rx="2" fill="#fff"/><path d="M3.2 7.2 A4.3 4.3 0 0 0 11.8 7.2 M7.5 11.5 V13.3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
               </div>
-              <div class="txt">懒得点?按住说 <b>「今晚 62.9」</b>,让助手替你记 →</div>
+              <div class="txt">懒得点?点右下角的小昏,说一句 <b>「今晚 62.9」</b> 就记好了 →</div>
             </div>
           </section>
 
@@ -491,19 +524,30 @@
               <div class="chart-wrap"><svg class="trend" id="trendSvg" viewBox="0 0 340 150" preserveAspectRatio="none" aria-label="体重趋势图"></svg></div>
             </div>
           </section>
+        </div>
 
-          <!-- ================= ASSISTANT ================= -->
-          <section class="view" id="v-ai">
-            <div class="chat-head">
-              <div class="ava" aria-hidden="true">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="4.4" fill="#fff"/><path d="M4 18 H20" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 4 V6.5 M6 6.5 L7.6 8.1 M18 6.5 L16.4 8.1" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
-              </div>
-              <div class="who">
-                <h2>小昏</h2>
-                <p>在线 · 你的减重搭子</p>
-              </div>
+        <!-- Floating AI entry -->
+        <button class="fab" id="fab" aria-label="打开 AI 助手 小昏">
+          <span class="spark" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6 A2 2 0 0 1 6 4 H18 A2 2 0 0 1 20 6 V15 A2 2 0 0 1 18 17 H9 L5 20.5 V17 H6 A2 2 0 0 1 4 15 Z" stroke="#fff" stroke-width="1.9" stroke-linejoin="round"/><path d="M9.5 10.5 L11 12 L14.5 8.8" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <!-- ================= ASSISTANT SHEET ================= -->
+        <div class="ai-sheet" id="aiSheet" role="dialog" aria-label="AI 助手 小昏">
+          <div class="sheet-head">
+            <div class="ava" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="4.4" fill="#fff"/><path d="M4 18 H20" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 4 V6.5 M6 6.5 L7.6 8.1 M18 6.5 L16.4 8.1" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
             </div>
+            <div class="who">
+              <h2>小昏</h2>
+              <p>在线 · 你的减重搭子</p>
+            </div>
+            <button class="sheet-close" id="sheetClose" aria-label="收起助手">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 6 L8 10.5 L12.5 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
 
+          <div class="sheet-body">
             <div class="thread" id="thread">
               <div class="msg ai">早呀 😊 昨晚睡得还好吗?想记体重的话,直接跟我说一声就行,比如「今早 63.2」。</div>
               <div class="msg me voice">
@@ -523,15 +567,14 @@
             </div>
 
             <div class="disclaim">小昏只提供陪伴与方向性建议,不替代医生或营养师的诊断。</div>
-          </section>
-        </div>
+          </div>
 
-        <!-- input bar (only on AI view) -->
-        <div class="inputbar" id="inputbar" style="display:none">
-          <input placeholder="说点什么,或按住麦克风…" id="chatInput" aria-label="消息输入">
-          <button class="mic" id="micBtn" aria-label="语音输入">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="6.7" y="2" width="4.6" height="9.4" rx="2.3" fill="#fff"/><path d="M3.8 8.6 A5.2 5.2 0 0 0 14.2 8.6 M9 13.8 V16" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>
-          </button>
+          <div class="inputbar">
+            <input placeholder="说点什么,或按住麦克风…" id="chatInput" aria-label="消息输入">
+            <button class="mic" id="micBtn" aria-label="语音输入">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="6.7" y="2" width="4.6" height="9.4" rx="2.3" fill="#fff"/><path d="M3.8 8.6 A5.2 5.2 0 0 0 14.2 8.6 M9 13.8 V16" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
 
         <nav class="tabbar">
@@ -541,13 +584,10 @@
           <button class="tab" data-v="cal">
             <svg class="ti" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="3" stroke="currentColor" stroke-width="1.9"/><path d="M3.5 9.5 H20.5 M8 3 V6 M16 3 V6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="14.5" r="1.6" fill="currentColor"/></svg>
           <span>日历</span></button>
-          <button class="tab" data-v="ai">
-            <svg class="ti" viewBox="0 0 24 24" fill="none"><path d="M4 6 A2 2 0 0 1 6 4 H18 A2 2 0 0 1 20 6 V15 A2 2 0 0 1 18 17 H9 L5 20.5 V17 H6 A2 2 0 0 1 4 15 Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9.5 10.5 L11 12 L14.5 8.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>助手</span></button>
         </nav>
       </div>
     </div>
-    <div class="caption">点底部标签切换 · 点日历某天看数值 · 到「助手」试试语音记录</div>
+    <div class="caption">点底部标签切换今天 / 日历 · 点日历某天看数值 · 点右下角小昏试语音记录</div>
   </div>
 </div>
 
@@ -558,8 +598,7 @@
   /* ---------- theme ---------- */
   var root = document.documentElement, tBtn = document.getElementById("themeBtn");
   function label() {
-    var dark = getComputedStyle(root).getPropertyValue("--bg").trim().toLowerCase().indexOf("#16") === 0
-      || root.getAttribute("data-theme") === "dark"
+    var dark = root.getAttribute("data-theme") === "dark"
       || (!root.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
     tBtn.textContent = dark ? "☀ 破晓" : "☾ 黄昏";
   }
@@ -571,30 +610,34 @@
   });
   label();
 
-  /* ---------- tab nav ---------- */
-  var views = { today: "v-today", cal: "v-cal", ai: "v-ai" };
+  /* ---------- tab nav (today / calendar) ---------- */
+  var views = { today: "v-today", cal: "v-cal" };
   var tabs = document.querySelectorAll(".tab");
-  var inputbar = document.getElementById("inputbar");
   function go(v) {
     Object.keys(views).forEach(function (k) {
       document.getElementById(views[k]).classList.toggle("active", k === v);
     });
     tabs.forEach(function (t) { t.classList.toggle("on", t.dataset.v === v); });
-    inputbar.style.display = v === "ai" ? "flex" : "none";
   }
   tabs.forEach(function (t) { t.addEventListener("click", function () { go(t.dataset.v); }); });
 
-  // shortcuts from Today
-  document.getElementById("todayHint").addEventListener("click", function () { go("ai"); });
-  document.getElementById("eveningCard").addEventListener("click", function () { go("ai"); });
+  /* ---------- AI sheet open / close ---------- */
+  var sheet = document.getElementById("aiSheet");
+  var fab = document.getElementById("fab");
+  function openSheet() { sheet.classList.add("open"); fab.classList.add("hidden"); scrollDown(); }
+  function closeSheet() { sheet.classList.remove("open"); fab.classList.remove("hidden"); }
+  fab.addEventListener("click", openSheet);
+  document.getElementById("sheetClose").addEventListener("click", closeSheet);
+  document.getElementById("todayHint").addEventListener("click", openSheet);
+  document.getElementById("eveningCard").addEventListener("click", openSheet);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeSheet(); });
 
   /* ---------- calendar ---------- */
-  // 晨重 data for July 2026 (day -> kg)
   var data = {1:64.6,2:64.7,3:64.4,4:64.5,5:64.2,6:64.3,7:64.0,8:63.9,9:64.1,10:63.7,11:63.8,12:63.5,13:63.6,14:63.3,15:63.2};
-  var eve = {14:62.9,13:63.1,12:63.0}; // a few evening samples
+  var eve = {14:62.9,13:63.1,12:63.0};
   var TODAY = 15;
-  var firstDow = new Date(2026, 6, 1).getDay(); // 0 Sun..6 Sat
-  var mondayIdx = (firstDow + 6) % 7; // convert to Monday-first blanks
+  var firstDow = new Date(2026, 6, 1).getDay();
+  var mondayIdx = (firstDow + 6) % 7;
   var daysInMonth = 31;
   var grid = document.getElementById("calGrid");
   var frag = document.createDocumentFragment();
@@ -606,12 +649,10 @@
     cell.className = "cell";
     var w = data[d];
     if (w) cell.classList.add("logged"); else cell.classList.add("empty-day");
-    if (d === TODAY) cell.classList.add("today");
-    if (d === TODAY) cell.classList.add("sel");
+    if (d === TODAY) { cell.classList.add("today"); cell.classList.add("sel"); }
     cell.innerHTML = '<span class="d">' + d + '</span>' + (w ? '<span class="w">' + w.toFixed(1) + '</span>' : "");
     (function (day, weight) {
       cell.addEventListener("click", function () {
-        if (!grid) return;
         grid.querySelectorAll(".cell.sel").forEach(function (c) { c.classList.remove("sel"); });
         this.classList.add("sel");
         selectDay(day, weight);
@@ -642,9 +683,8 @@
     var min = Math.min.apply(null, vals) - 0.3, max = Math.max.apply(null, vals) + 0.3;
     var x = function (i) { return padX + i * (W - 2 * padX) / (days.length - 1); };
     var y = function (v) { return padTop + (max - v) / (max - min) * (H - padTop - padBot); };
-
     var ns = "http://www.w3.org/2000/svg";
-    // defs gradient
+
     var defs = document.createElementNS(ns, "defs");
     defs.innerHTML =
       '<linearGradient id="area" x1="0" y1="0" x2="0" y2="1">' +
@@ -657,7 +697,6 @@
       '</linearGradient>';
     svg.appendChild(defs);
 
-    // grid lines
     for (var g = 0; g <= 2; g++) {
       var gy = padTop + g * (H - padTop - padBot) / 2;
       var ln = document.createElementNS(ns, "line");
@@ -680,7 +719,6 @@
     line.setAttribute("stroke-linejoin", "round");
     svg.appendChild(line);
 
-    // endpoint emphasis
     var last = days.length - 1;
     var halo = document.createElementNS(ns, "circle");
     halo.setAttribute("cx", x(last)); halo.setAttribute("cy", y(data[days[last]]));
@@ -692,7 +730,6 @@
     dot.setAttribute("stroke", "var(--surface)"); dot.setAttribute("stroke-width", "2");
     svg.appendChild(dot);
 
-    // endpoint label
     var lbl = document.createElementNS(ns, "text");
     lbl.setAttribute("x", x(last)); lbl.setAttribute("y", y(data[days[last]]) - 11);
     lbl.setAttribute("text-anchor", "end"); lbl.setAttribute("fill", "var(--accent)");
@@ -704,19 +741,20 @@
   /* ---------- assistant demo ---------- */
   var thread = document.getElementById("thread");
   var suggest = document.getElementById("suggest");
+  var sheetBody = document.querySelector(".sheet-body");
   var replies = {
     evening: {
-      me: { type: "text", text: "今晚 62.9" },
+      me: "今晚 62.9",
       ai: "收到~ 今晚 <b>62.9 kg</b>,睡前比早上还降了一点,说明今天没有水肿,状态不错 🌙",
       tool: { label: "晚重", val: "62.9 kg", date: "7月15日" }
     },
     trend: {
-      me: { type: "text", text: "这周瘦了多少?" },
+      me: "这周瘦了多少?",
       ai: "这周(7 天)晨重从 64.0 到 63.2,<b>净减 0.8 kg</b> 👍 曲线一直往下走,很平稳,继续保持就好。",
       tool: null
     },
     mood: {
-      me: { type: "text", text: "没忍住吃了宵夜,好后悔…" },
+      me: "没忍住吃了宵夜,好后悔…",
       ai: "别急着自责呀 🫶 偶尔一次宵夜不会毁掉这么多天的努力,你这半个月一直在稳稳往下走。明早正常称,多喝点水就好——要不要我提醒你早上记一下?",
       tool: null
     }
@@ -730,17 +768,14 @@
     return el;
   }
   function scrollDown() {
-    var view = document.getElementById("v-ai");
-    view.scrollTop = view.scrollHeight;
+    if (sheetBody) sheetBody.scrollTop = sheetBody.scrollHeight;
   }
 
   function respond(key) {
     var r = replies[key];
     if (!r) return;
-    // user bubble
-    addMsg("me", r.me.text);
+    addMsg("me", r.me);
     scrollDown();
-    // typing
     var typing = document.createElement("div");
     typing.className = "typing";
     typing.innerHTML = "<i></i><i></i><i></i>";
