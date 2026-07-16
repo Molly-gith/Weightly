@@ -1,5 +1,13 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>晨昏 Weightly · V1 原型</title>
 <style>
+  html, body { margin: 0; padding: 0; }
+  img { max-width: 100%; }
   :root {
     --bg-top: #FCE7CE;
     --bg-bot: #E7D9EE;
@@ -386,6 +394,8 @@
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 </style>
+</head>
+<body>
 
 <button class="theme-toggle" id="themeBtn" aria-label="切换明暗">☾ 黄昏</button>
 
@@ -821,3 +831,5 @@
   document.getElementById("micBtn").addEventListener("click", sendFree);
 })();
 </script>
+</body>
+</html>
