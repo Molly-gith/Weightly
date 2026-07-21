@@ -3,6 +3,7 @@
 **AI 陪伴式减重管理产品(App + Web)。** 早晚体重记录、日历看每日数值、趋势可视化,以及一个会陪伴、能用语音/文字帮你记录的 AI 助手「小昏」。和小程序线最本质的区别是:AI 助手不是锦上添花的功能,而是这条产品线存在的理由。
 
 > 与小程序线的关系:小程序版「晨昏·体重日历」(仓库 `Molly-gith/weight-tracker`,uni-app / uniCloud)已冻结、保留国内入口;本仓库是全新技术栈(Expo + Express + PostgreSQL)重做,承载 AI Agent 的长期方向。
+> 小程序线在线体验:[网页版 App](https://molly-gith.github.io/weight-tracker/) · [原型案例展示页](https://molly-gith.github.io/weight-tracker/showcase/)(记录了 V1 → V2 → V3 的迭代过程和设计思路)
 
 ## 仓库结构
 
